@@ -6,9 +6,22 @@
   "description": "LR Imports — Motion 3D Cinematográfico (assets 3D + futuro comercial)",
   "scripts": {
     "build:glb": "node tools/glb/build.mjs",
-    "preview:glb": "node tools/glb/preview.mjs"
+    "preview:glb": "node tools/glb/preview.mjs",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "audio": "python3 tools/audio/build_audio.py",
+    "render": "node tools/render/render.mjs"
   },
   "dependencies": {
+    "@react-three/drei": "^9.117.3",
+    "@react-three/fiber": "^8.17.10",
+    "@react-three/postprocessing": "^2.16.3",
+    "gsap": "^3.12.5",
+    "postprocessing": "^6.36.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "three": "^0.170.0"
   },
   "devDependencies": {
@@ -17,7 +30,13 @@
     "@fontsource/cormorant-garamond": "^5.1.0",
     "@fontsource/inter-tight": "^5.1.0",
     "@fontsource/marcellus": "^5.1.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.170.0",
+    "@vitejs/plugin-react": "^4.3.4",
     "gltf-validator": "^2.0.0-dev.3.10",
-    "potrace": "^2.1.8"
+    "potrace": "^2.1.8",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
   }
 }

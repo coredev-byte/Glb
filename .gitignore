@@ -1,3 +1,6 @@
 node_modules/
 .DS_Store
 exports/*.mp4
+exports/stills*/
+exports/frames/
+dist/

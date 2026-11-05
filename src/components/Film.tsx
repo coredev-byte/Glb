@@ -8,6 +8,7 @@ import { PostFX } from './PostFX';
 import { HudLayer } from './Hud';
 import { clock, isRenderMode } from '../engine/clock';
 import { DURATION } from '../config/timeline';
+import { quality as Q } from '../engine/quality';
 import { Scene01Hook } from '../scenes/Scene01Hook';
 import { Scene02Offer } from '../scenes/Scene02Offer';
 import { Scene03Comparison } from '../scenes/Scene03Comparison';
@@ -49,7 +50,7 @@ export function Film({ quality = 'high', audio }: { quality?: 'draft' | 'high'; 
       dpr={dpr}
       frameloop={isRenderMode ? 'never' : 'always'}
       camera={{ fov: 35, near: 0.03, far: 200, position: [0, 1, 5] }}
-      gl={{ antialias: true, powerPreference: 'high-performance', preserveDrawingBuffer: isRenderMode, alpha: false }}
+      gl={{ antialias: Q.aa, powerPreference: 'high-performance', preserveDrawingBuffer: isRenderMode, alpha: false }}
       onCreated={({ gl }) => {
         gl.localClippingEnabled = true;
         gl.toneMapping = THREE.NoToneMapping;

@@ -15,7 +15,7 @@ import { clamp, ease, lerp } from '../motion/easings';
 
 export const S1_CARDS = [
   { label: 'OFERTA', at: 1.1, pos: [-0.33, 0.88, 0.45] as const, rot: 0.38, w: 0.44 },
-  { label: 'PREÇO BAIXO', at: 1.4, pos: [0.35, 0.52, 0.4] as const, rot: -0.34, w: 0.56 },
+  { label: 'PREÇO BAIXO', at: 1.4, pos: [0.3, 0.52, 0.4] as const, rot: -0.34, w: 0.52 },
   { label: 'IMPERDÍVEL', at: 1.7, pos: [-0.3, 0.2, 0.55] as const, rot: 0.22, w: 0.52 },
 ];
 

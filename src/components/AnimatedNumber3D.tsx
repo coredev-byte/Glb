@@ -87,7 +87,7 @@ export function RollingDigits3D({
       di++;
     });
     // janela de recorte em coordenadas de mundo
-    group.current.updateMatrixWorld();
+    group.current.updateWorldMatrix(true, false);
     const s = group.current.matrixWorld;
     const up = n.set(0, 1, 0).transformDirection(s);
     const top = v.set(0, CAP + 0.14, 0).applyMatrix4(s);

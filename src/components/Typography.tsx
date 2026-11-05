@@ -25,7 +25,7 @@ function MaskedLine({ line, y, maxW, stagger = 0.022 }: { line: TitleLine; y: nu
   const size = Math.min(line.size ?? 0.08, maxW / raw);
   useFrame(() => {
     const g = group.current;
-    g.updateMatrixWorld();
+    g.updateWorldMatrix(true, false);
     up.set(0, 1, 0).transformDirection(g.matrixWorld);
     p.set(0, -CAP / 2 - 0.36, 0).multiplyScalar(size); // abaixo da linha de base (cedilha, vírgula)
     p.applyMatrix4(g.matrixWorld);

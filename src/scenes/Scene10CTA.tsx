@@ -59,9 +59,9 @@ function LogoEnd({ at }: { at: number }) {
     const t = clock.t;
     const k = ease.out(clamp((t - at) / 0.9));
     g.current.visible = t > at;
-    g.current.position.y = -0.3 - (1 - k) * 0.03;
+    g.current.position.y = -0.255 - (1 - k) * 0.03;
     g.current.rotation.x = (1 - k) * 0.5;
-    g.current.scale.setScalar(Math.max(0.001, 0.22 * (0.92 + 0.08 * k)));
+    g.current.scale.setScalar(Math.max(0.001, 0.2 * (0.92 + 0.08 * k)));
   });
   return <group ref={g}><Logo3D /></group>;
 }

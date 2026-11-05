@@ -19,7 +19,7 @@ const t0 = T('s04');
 const GAP_X = 0.62;                      // posição final dos extremos (±)
 const MIN_TOP = colTop(0), MAX_TOP = colTop(CHART_N - 1);
 export const NUM_SIZE = 0.26;
-export const NUM_POS: [number, number, number] = [0, MAX_TOP + 0.4, 0.3];
+export const NUM_POS: [number, number, number] = [0, MAX_TOP + 0.66, 0.3];
 const RING_Y = (MIN_TOP + MAX_TOP) / 2;
 const BRACKET_X = GAP_X - CHART.width / 2 - 0.08;
 
@@ -28,7 +28,7 @@ registerShot('s04', (lt): Pose => {
   const orbit = ease.soft(clamp((lt - 1.4) / 3.1));
   const ang = orbit * 0.3;
   const dist = lerp(10.9, 5.9, push);
-  const ty = lerp(1.12, 2.0, push);
+  const ty = lerp(1.12, 2.15, push);
   return {
     pos: [Math.sin(ang) * dist, lerp(1.72, 1.95, push) + orbit * 0.1, Math.cos(ang) * dist], target: [0, ty, 0.2],
     fov: lerp(38, 40, push), focus: dist, focusRange: 1.6, bokeh: keys(lt, [[0, 0.4], [1.6, 1.4]]),
@@ -123,7 +123,7 @@ export function Scene04Index() {
         sinkFn={(i, t) => (keep(i) ? 0 : ease.in(clamp((t - (t0 + 0.02 + Math.abs(i - 3) * 0.05)) / 0.45)))}
         xFn={(i, t) => (i === 0 ? lerp(barX(0, CHART_N, CHART.spacing), -GAP_X, slide(t)) : i === CHART_N - 1 ? lerp(barX(i, CHART_N, CHART.spacing), GAP_X, slide(t)) : barX(i, CHART_N, CHART.spacing))}
         highlightFn={() => 1} countT={() => [0, 0.001]}
-        labelScaleFn={(i) => (keep(i) ? 1.6 : 1)} connectorFn={() => 0} />
+        labelScaleFn={(i) => (keep(i) ? 1.2 : 1)} connectorFn={() => 0} />
       <Dimension />
       <AnimatedNumber3D from={0} to={pricingStats.diff} t0={t0 + 0.3} t1={t0 + 1.45} format="brl"
         size={NUM_SIZE} weight="black" depth={0.38} bevel={0.022} tracking={0.01} material={num} position={NUM_POS}
@@ -132,7 +132,7 @@ export function Scene04Index() {
           m.position.z = (1 - k) * -1.2; m.scale.setScalar(Math.max(0.001, k));
         }} />
       <Text3D text="DE DIFERENÇA." size={0.062} weight="bold" tracking={0.2} depth={0.04} bevel={0.003} material={small}
-        position={[0, MAX_TOP + 0.13, 0.3]}
+        position={[0, MAX_TOP + 0.42, 0.3]}
         charAnim={(t: number, i: number, _n: number, m: THREE.Mesh) => {
           const k = ease.out(clamp((t - (t0 + 1.55 + i * 0.025)) / 0.45));
           m.position.y = (1 - k) * -0.8; m.scale.setScalar(Math.max(0.001, k));

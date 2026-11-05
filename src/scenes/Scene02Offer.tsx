@@ -81,8 +81,8 @@ function PriceTag() {
       <RoundedBox args={[1.56, 0.66, 0.05]} radius={0.06} smoothness={4} material={glass} />
       {/* ilhós + cordão */}
       <mesh material={metal} position={[-0.66, 0.2, 0.03]}><torusGeometry args={[0.04, 0.012, 12, 32]} /></mesh>
-      <Text3D text="R$" size={0.11} weight="medium" depth={0.05} bevel={0.005} material={small} position={[-0.5, -0.04, 0.05]} />
-      <RollingDigits3D valueFn={valueAt} digits={3} decimals={2} size={0.26} weight="bold" depth={0.14} bevel={0.012} material={digits} position={[0.14, -0.17, 0.06]} />
+      <Text3D text="R$" size={0.09} weight="medium" depth={0.05} bevel={0.005} material={small} position={[-0.52, -0.05, 0.05]} />
+      <RollingDigits3D valueFn={valueAt} digits={3} decimals={2} size={0.19} weight="bold" depth={0.14} bevel={0.012} material={digits} position={[0.12, -0.15, 0.06]} />
       <Text3D text={pricingSample.product.toUpperCase()} size={0.026} weight="medium" tracking={0.14} depth={0.01} bevel={0} material={small} position={[0.08, 0.24, 0.04]} />
     </group>
   );

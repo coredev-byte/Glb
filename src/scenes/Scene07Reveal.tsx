@@ -49,7 +49,7 @@ export function Scene07Reveal() {
     rig.rimR.intensity = 160; rig.rimR.color = '#e6bd85'; rig.rimR.pos = [2.4, 1.9, -2.2]; rig.rimR.target = [0, 0.7, 0];
     // a luz percorre as bordas: varredura vertical em arco
     const sw = clamp(lt / 3.6);
-    rig.sweep.intensity = keys(lt, [[0, 0], [0.25, 35], [3.4, 35], [3.9, 0]]); rig.sweep.angle = 0.12; rig.sweep.color = '#ffffff';
+    rig.sweep.intensity = keys(lt, [[0, 0], [0.25, 16], [3.4, 16], [3.9, 0]]); rig.sweep.angle = 0.12; rig.sweep.color = '#ffffff';
     rig.sweep.pos = [lerp(-1.6, 1.8, ease.inOut(sw)), lerp(2.2, 1.0, sw), 2.2]; rig.sweep.target = [0, lerp(1.1, 0.4, sw), 0];
     rig.top.intensity = 9; rig.top.angle = 0.35; rig.top.pos = [0, 4.5, 0.6]; rig.top.target = [0, 0.6, 0];
     rig.fill = lerp(0.03, 0.12, keyIn); rig.fillColor = '#c9b9a0'; rig.floor = 0.9; rig.dust = 0.5; rig.dustColor = '#ffdcae';

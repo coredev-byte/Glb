@@ -10,6 +10,7 @@ import { rig, SpotState } from '../engine/rig';
 import { fx } from '../engine/fx';
 import { clock } from '../engine/clock';
 import { rng } from '../motion/sequencing';
+import { quality as Q } from '../engine/quality';
 
 function Spot({ s }: { s: () => SpotState }) {
   const light = useRef<THREE.SpotLight>(null!);
@@ -65,10 +66,10 @@ function Floor() {
   return (
     <mesh ref={ref} rotation-x={-Math.PI / 2} receiveShadow>
       <planeGeometry args={[60, 60]} />
-      <MeshReflectorMaterial
-        resolution={512} blur={[420, 120]} mixBlur={1} mixStrength={3.2} mirror={0.6} roughness={0.85} depthScale={1.1}
+      {Q.reflect > 0 ? <MeshReflectorMaterial
+        resolution={Q.reflect} blur={[420, 120]} mixBlur={1} mixStrength={3.2} mirror={0.6} roughness={0.85} depthScale={1.1}
         minDepthThreshold={0.4} maxDepthThreshold={1.3} color="#050608" metalness={0.6}
-      />
+      /> : <meshStandardMaterial color="#050608" metalness={0.6} roughness={0.35} />}
     </mesh>
   );
 }

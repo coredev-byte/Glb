@@ -1,0 +1,23 @@
+{
+  "name": "lr-imports-motion",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "LR Imports — Motion 3D Cinematográfico (assets 3D + futuro comercial)",
+  "scripts": {
+    "build:glb": "node tools/glb/build.mjs",
+    "preview:glb": "node tools/glb/preview.mjs"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@fontsource/aref-ruqaa": "^5.1.0",
+    "@fontsource/cinzel": "^5.1.0",
+    "@fontsource/cormorant-garamond": "^5.1.0",
+    "@fontsource/inter-tight": "^5.1.0",
+    "@fontsource/marcellus": "^5.1.0",
+    "gltf-validator": "^2.0.0-dev.3.10",
+    "potrace": "^2.1.8"
+  }
+}

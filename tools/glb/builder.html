@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>LR Imports — GLB builder</title>
+<style>
+  @font-face { font-family: 'Cinzel'; font-weight: 400; src: url('/node_modules/@fontsource/cinzel/files/cinzel-latin-400-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Cinzel'; font-weight: 600; src: url('/node_modules/@fontsource/cinzel/files/cinzel-latin-600-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Inter Tight'; font-weight: 800; src: url('/node_modules/@fontsource/inter-tight/files/inter-tight-latin-800-normal.woff2') format('woff2'); }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "/node_modules/three/build/three.module.js",
+  "three/addons/": "/node_modules/three/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<script type="module">
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { buildSupremacy } from './lib/supremacy.js';
+import { buildLogo } from './lib/logo.js';
+
+await Promise.all([
+  document.fonts.load("400 40px 'Cinzel'"), document.fonts.load("600 40px 'Cinzel'"), document.fonts.load("800 40px 'Inter Tight'"),
+]);
+
+function toBase64(buf) {
+  const bytes = new Uint8Array(buf);
+  let s = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(s);
+}
+
+const builders = {
+  'supremacy-collectors-edition': () => buildSupremacy(),
+  'lr-imports-logo': () => buildLogo('/tools/glb/work/logo.svg'),
+};
+
+window.buildGLB = async (name) => {
+  const obj = await builders[name]();
+  const glb = await new GLTFExporter().parseAsync(obj, { binary: true, maxTextureSize: 2048 });
+  return toBase64(glb);
+};
+window.__ready = true;
+</script>
+</body>
+</html>

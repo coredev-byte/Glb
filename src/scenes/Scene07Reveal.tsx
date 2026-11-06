@@ -64,7 +64,7 @@ export function Scene07Reveal() {
           { text: 'UMA OUTRA FORMA', at: t0 + 0.55, out: t0 + 3.0, size: 0.056, weight: 'bold', tracking: 0.05 },
           { text: 'DE ESCOLHER.', at: t0 + 0.75, out: t0 + 3.05, size: 0.056, weight: 'bold', tracking: 0.05 },
         ]} />
-        <LogoReveal at={t0 + 3.15} out={t0 + 5.55} />
+        <LogoReveal at={t0 + 3.45} out={t0 + 5.55} />
       </Hud>
     </SceneRoot>
   );

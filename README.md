@@ -1,71 +1,104 @@
 # LR Imports — Motion 3D Cinematográfico
 
-Assets 3D do comercial "Deixe o rastro para a fragrância. Não para o preço."
-Esta etapa entrega os **modelos GLB**. O comercial (React + Three.js / R3F, cenas 01–10) é construído em cima destes arquivos.
+Comercial vertical **"Deixe o rastro para a fragrância. Não para o preço."**
+9:16 · 1080×1920 · 30 fps · 47,5 s · H.264 + AAC 48 kHz · locução do Marcio (ElevenLabs).
 
-## Modelos
+Sequência: curiosidade → desconfiança → evidência (dados reais) → surpresa → desejo (Supremacy) → conversão.
 
-| Arquivo | O que é | Origem |
-|---|---|---|
-| `public/models/asad.glb` | Lattafa Asad EDP 100 ml (cenas 1–6) | Fornecido pela LR Imports (gerado no Tripo), sem alterações |
-| `public/models/supremacy-collectors-edition.glb` | Afnan Supremacy Collector's Edition 100 ml (herói, cenas 7–10) | Procedural: `tools/glb/lib/supremacy.js` |
-| `public/brand/lr-imports-logo.glb` | Logo LR Importados em 3D (ouro extrudado + selo preto) | Vetorizada da logo oficial: `tools/glb/lib/logo.js` |
-| `public/brand/logo.png` | Logo com fundo transparente (overlay 2D) | `tools/glb/prep-logo.py` |
-
-Preview: `exports/previews/glb-overview.png`.
-
-### Convenção (todos os frascos)
-
-- **1 unidade = altura total do frasco** (com tampa), **base em y = 0**, **frente voltada para +Z**, centralizado em X/Z.
-  Assim os modelos podem ser trocados sem reprogramar as cenas.
-- A logo tem **largura = 1 unidade**, centrada na origem, de pé no plano XY, frente em +Z.
-
-### Hierarquia de nós (para animação)
-
-```
-SupremacyCollectorsEdition
-├── Bottle
-│   ├── Body      pedra cinza salpicada laqueada (PBR + clearcoat + normal map)
-│   ├── Label     SUPREMACY / COLLECTOR'S EDITION / AFNAN (tinta prata, alpha mask)
-│   └── Crest     brasão em relevo (gunmetal + normal map)
-├── Collar        gargalo preto piano
-└── Cap           grupo animável (tirar/girar a tampa)
-    ├── CapRing   anel preto cromado
-    └── CapStem   haste
-
-LRImportsLogo
-├── BadgeDisc     selo circular preto (pode ser ocultado)
-└── LogoGold      letreiro "LR + frasco + IMPORTADOS" em ouro escovado
-```
-
-## Observações sobre fidelidade
-
-- **Asad (fornecido):** é um modelo gerado por IA. Os textos "ASAD" e "Lattafa" saíram deformados na textura e o dourado
-  tem aparência de creme fosco (o mapa de metalness não marca o metal). Para o comercial, o recomendado é um destes caminhos:
-  ajustar o material dourado em runtime, manter o Asad mais em contraluz/silhueta nos close-ups, ou trocar por um modelo melhor
-  com o mesmo nome de arquivo.
-- **Supremacy:** proporções medidas sobre a foto de referência. Esta tipografia é uma aproximação feita com fontes livres
-  (Cinzel / Inter Tight). O **brasão é estilizado e não é a arte oficial da Afnan**. Se houver a arte vetorial oficial, basta
-  trocar a textura em `crestTextures()`.
-- **Logo:** vetorizada automaticamente (potrace). O microtexto "IMPORTADOS" dentro do quadradinho do frasco é fino demais
-  para o trace e foi omitido; o "LR" interno foi mantido.
-
-## Regenerar
+## Rodar
 
 ```bash
 npm install
-python3 tools/glb/prep-logo.py        # máscara + logo.png (precisa de Pillow e numpy)
-node tools/glb/trace-logo.mjs         # vetoriza -> tools/glb/work/logo.svg
-npm run build:glb                     # gera supremacy-collectors-edition.glb e lr-imports-logo.glb
-node tools/glb/validate.mjs           # validador Khronos glTF
-node tools/glb/preview.mjs supremacy-collectors-edition models exports/previews 0,35,90
+npm run dev            # preview em http://127.0.0.1:5173
 ```
 
-Visualizador interativo: `node tools/glb/serve.mjs` e abrir `http://127.0.0.1:5174/tools/glb/viewer.html`.
+Preview: play/pause (espaço), timeline arrastável, frame exato (←/→, Shift = 1 s), seletor das 10 cenas,
+câmera lenta (0,25× / 0,5×), qualidade rascunho/final, zona segura do Reels/TikTok, legenda da locução atual.
 
-Geração determinística: todo ruído/salpicado usa PRNG com seed fixa, então a saída é sempre a mesma.
-O build roda no Chromium headless (Playwright) porque o GLTFExporter precisa de Canvas para gerar as texturas.
+## Exportar
 
-## Referências
+```bash
+# frames numerados (retomável; 2 processos em paralelo aproveitam melhor a CPU)
+node tools/render/render.mjs --frames --from 0 --to 713
+node tools/render/render.mjs --frames --from 713 --to 1425
+# monta o MP4 final (vídeo + mix normalizado a −14 LUFS)
+node tools/render/render.mjs --encode
+# stills para revisão
+node tools/render/render.mjs --stills 1.5,15.5,28.6 --out exports/stills
+```
 
-`references/` contém os dois motions de referência, a foto do Supremacy e o print do perfil @lr.imports.mt.
+Saída: `exports/lr-imports-supremacy-1080x1920.mp4`.
+A renderização é determinística: cada frame define o relógio global (`src/engine/clock.ts`) e o R3F renderiza
+exatamente aquele instante (câmera, partículas, luzes, números). Funciona sem GPU (SwiftShader, ~3 s/frame por processo).
+Qualidade da exportação: `?render&msaa=0&dofres=0.4&smaa=1` (ajustável com `--query`).
+
+## Áudio
+
+```bash
+npm run audio          # python3 tools/audio/build_audio.py  (precisa de numpy + scipy)
+```
+
+- `public/audio/narration/marcio-take1.mp3` — locução bruta (Marcio - Viral Hook Narrator, eleven_v4, com tags de emoção)
+- `public/audio/narration.wav` · `music.wav` · `sfx.wav` · `mix.wav` — stems editados na timeline (48 kHz / 24-bit)
+- Trilha e efeitos são **originais**, sintetizados de forma determinística a partir dos cues de `src/config/timeline.json`.
+- Para trocar a locução: substitua o arquivo, ajuste `narration.edit`/`vo` no `timeline.json` e rode `npm run audio`.
+
+Roteiro completo com tempos, interpretação e textos em tela: [`docs/roteiro-locucao.md`](docs/roteiro-locucao.md).
+
+## Campos editáveis — `src/config/brand.ts`
+
+| Campo | Estado | Efeito |
+|---|---|---|
+| `priceSupremacy` | **null** (não confirmado) | Cena 9 só mostra a etiqueta 3D de preço quando preenchido |
+| `supremacyComparable` | null | Só preencher com evidência documentada do MESMO Supremacy 100 ml |
+| `whatsapp` | null | Aparece no CTA final quando preenchido |
+| `instagram` | `@lr.imports.mt` | Perfil oficial (print enviado) |
+
+## Dados e integridade
+
+`src/config/pricing-data.ts` — Lattafa Asad EDP 100 ml, 7 lojas, coleta 28/10/2026.
+Fonte: https://paginas.farmacia-ia.com/perfumes/perfume-lattafa-asad-eau-de-parfum-masculino-arabe
+
+Valores exibidos são **calculados** da lista: menor R$ 199,41 · maior R$ 399,90 · diferença R$ 200,49 · +100,5% · 7 lojas.
+O comercial não afirma margem, abuso, falsificação nem que a LR Imports é a mais barata; não usa o preço do Asad
+para falar do Supremacy. Os nomes das lojas não aparecem na tela (só no arquivo de dados), para não sugerir acusação.
+**Atualize os preços se o anúncio for publicado depois da data da coleta.**
+
+Notas olfativas do Supremacy: fonte oficial https://afnan.com/products/supremacy-collectors-edition
+
+## Estrutura
+
+```
+src/
+  config/        brand.ts · pricing-data.ts · timeline.json/.ts · assets.ts
+  engine/        clock.ts (relógio único) · fx.ts (foco/bloom/exposição) · rig.ts (luzes) · quality.ts
+  motion/        easings.ts (cubic-bezier) · sequencing.ts (keys, janelas, PRNG)
+  components/    Text3D (tipografia extrudada) · AnimatedNumber3D (contador + dígitos mecânicos) · BarChart3D
+                 GlassCard3D · ScentTrails/Ripples · FragranceNotes3D · LuxuryPedestal · CameraRig · Hud (títulos)
+                 Studio (luzes, ambiente, piso refletivo, poeira) · PostFX · Overlay2D (rodapés/CTA) · Film
+  scenes/        Scene01Hook … Scene10CTA · HeroSet (Supremacy contínuo da cena 6 à 10)
+public/
+  models/        asad.glb (fornecido) · supremacy-collectors-edition.glb (procedural)
+  brand/         lr-imports-logo.glb · logo.png · lr-imports-logo-original.jpg
+  audio/ fonts/
+tools/
+  glb/           gerador dos GLBs (Supremacy + logo) · preview · validação Khronos
+  audio/         trilha, SFX e mix
+  render/        exportação por frame (Playwright + FFmpeg)
+references/      motions de referência, foto do Supremacy, print do perfil
+docs/            roteiro de locução e timeline
+```
+
+## Modelos 3D
+
+Convenção para trocar modelos sem reprogramar cenas: **altura total = 1 unidade, base em y = 0, frente para +Z**.
+
+- `asad.glb` — fornecido (gerado por IA/Tripo). Textos "ASAD"/"Lattafa" da textura são imperfeitos; o dourado é
+  corrigido em runtime (`ProductModel.tsx`) para metal. Substitua por um modelo melhor com o mesmo nome se tiver.
+- `supremacy-collectors-edition.glb` — procedural (`tools/glb/lib/supremacy.js`), proporções da foto; o **brasão é
+  estilizado, não é a arte oficial da Afnan**. Nós: `Body`, `Label`, `Crest`, `Collar`, `Cap` (`CapRing`, `CapStem`).
+- `lr-imports-logo.glb` — vetorizado da logo oficial; nós `LogoGold` e `BadgeDisc`.
+
+```bash
+npm run build:glb && node tools/glb/validate.mjs
+```

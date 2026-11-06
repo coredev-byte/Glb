@@ -141,7 +141,7 @@ export function Scene02Offer() {
   const stripMat = useMemo(() => new THREE.MeshBasicMaterial({ color: '#8d939c', toneMapped: false }), []);
 
   return (
-    <SceneRoot id="s02" pre={-0.6} post={0.3}>
+    <SceneRoot id="s02" pre={-0.6}>
       <group position={L(0, 0, 0)} rotation-y={ROT}>
         <group position={[0.3, 0, -1.05]}>
           <LuxuryPedestal radius={0.32} height={0.08} glowColor="#CDD0D5" spin={0.2} />
@@ -158,8 +158,8 @@ export function Scene02Offer() {
       ))}
       <Hud>
         <HudTitle y={0.64} lines={[
-          { text: 'MAS SERÁ', at: t0 + 1.95, out: t0 + 3.75, size: 0.08, weight: 'black' },
-          { text: 'QUE É?', at: t0 + 2.15, out: t0 + 3.8, size: 0.08, weight: 'black' },
+          { text: 'MAS SERÁ', at: t0 + 1.95, out: t0 + 3.45, size: 0.08, weight: 'black' },
+          { text: 'QUE É?', at: t0 + 2.15, out: t0 + 3.5, size: 0.08, weight: 'black' },
         ]} />
       </Hud>
     </SceneRoot>

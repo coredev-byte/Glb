@@ -72,18 +72,18 @@ export function RollingDigits3D({
   useFrame(() => {
     const t = clock.t;
     const val = Math.max(0, valueFn(t));
-    const cents = Math.round(val * 100);
-    const str = String(cents).padStart(digits + decimals, '0');
-    const frac = val * 100 - Math.floor(val * 100);
+    // odômetro em centavos: cada tambor mostra exatamente o dígito do valor; só rola durante o "vai-um"
+    const c = Math.round(val * 100 * 1000) / 1000;
+    const ci = Math.floor(c + 1e-6);
     let di = 0;
     drums.forEach((g, i) => {
       if (cols.list[i].isComma) return;
-      const place = digits + decimals - 1 - di; // potência de 10
-      const raw = (val * 100) / Math.pow(10, place);
-      const digit = Number(str[di]);
-      // rolagem contínua do tambor (dígito + fração do próximo), estilo odômetro
-      const next = place === 0 ? frac : Math.max(0, (raw % 1) * 10 - 9);
-      g.position.y = (digit + clamp(next)) * lineH * 1;
+      const k = digits + decimals - 1 - di; // casa decimal em centavos (0 = centavo)
+      const p = Math.pow(10, k);
+      const digit = Math.floor(ci / p) % 10;
+      const rem = c - Math.floor(c / p) * p; // parte abaixo desta casa
+      const prog = k === 0 ? c - ci : clamp(rem - (p - 1));
+      g.position.y = (digit + prog) * lineH;
       di++;
     });
     // janela de recorte em coordenadas de mundo
